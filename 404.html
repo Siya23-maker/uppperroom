@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="en-ZA">
+<head>
+  <meta charset="utf-8">
+  <title>The Upper Room</title>
+  <meta name="robots" content="noindex">
+  <script>
+    // GitHub Pages serves this file for any address it can't find inside the site,
+    // e.g. /uppperroom/shop or /uppperroom/product/abc (old-style links).
+    // Send the visitor to the same page using the site's "#" routes instead.
+    (function () {
+      var parts = location.pathname.split('/');
+      var base = '/' + (parts[1] || '') + '/';          // e.g. "/uppperroom/"
+      var rest = location.pathname.slice(base.length);  // e.g. "shop"
+      location.replace(base + '#/' + rest + location.search);
+    })();
+  </script>
+</head>
+<body>
+  <p>Redirecting to <a href="./">The Upper Room</a>…</p>
+</body>
+</html>

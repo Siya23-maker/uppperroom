@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en-ZA">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script>
+    // Hosting mode.
+    // - Local dev server (npm start on localhost): clean URLs such as /shop.
+    // - Anywhere else (e.g. GitHub Pages at /uppperroom/): routes after "#", e.g. /uppperroom/#/shop,
+    //   so the homepage, refreshes and back/forward work without a server.
+    // The <base> tag makes the relative asset paths below resolve from the site folder on every route.
+    (function () {
+      var local = /^(localhost|127\.0\.0\.1|\[::1\])$/.test(location.hostname);
+      window.__UR_ROUTER_MODE = local ? 'history' : 'hash';
+      var base = local ? '/' : location.pathname.replace(/[^/]*$/, '');
+      document.write('<base href="' + base + '">');
+    })();
+  </script>
+  <title>The Upper Room · Gather Together, Brewing in Unity</title>
+  <meta name="description" content="The Upper Room — a Christian marketplace for church-member businesses. Gather Together, Brewing in Unity.">
+  <meta name="theme-color" content="#722F45">
+  <!-- Prototype: keep out of search indexes until the production domain is confirmed. -->
+  <meta name="robots" content="noindex, nofollow">
+  <!-- Canonical URL intentionally omitted: production domain not yet confirmed. -->
+
+  <!-- Open Graph (PLACEHOLDERS — confirm image and URL before launch) -->
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="The Upper Room">
+  <meta property="og:title" content="The Upper Room · Gather Together, Brewing in Unity">
+  <meta property="og:description" content="Gather Together, Brewing in Unity">
+  <meta property="og:image" content="assets/images/logo.png">
+  <meta property="og:locale" content="en_ZA">
+  <meta name="twitter:card" content="summary_large_image">
+
+  <link rel="icon" href="assets/images/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&display=swap">
+
+  <link rel="stylesheet" href="styles/tokens.css">
+  <link rel="stylesheet" href="styles/base.css">
+  <link rel="stylesheet" href="styles/layout.css">
+  <link rel="stylesheet" href="styles/components.css">
+  <link rel="stylesheet" href="styles/pages.css">
+  <link rel="stylesheet" href="styles/dashboard.css">
+  <script type="module" src="src/app.js"></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to main content</a>
+  <div class="route-progress" id="route-progress" aria-hidden="true"></div>
+  <div id="app">
+    <div id="header-mount"></div>
+    <main id="main" tabindex="-1">
+      <noscript>
+        <div class="container section">
+          <h1>The Upper Room</h1>
+          <p>This interactive prototype needs JavaScript enabled.</p>
+        </div>
+      </noscript>
+    </main>
+    <div id="footer-mount"></div>
+  </div>
+  <div class="scrim" id="scrim" hidden></div>
+  <div class="toasts" id="toasts" aria-live="polite"></div>
+  <p class="sr-only" id="route-announcer" aria-live="polite"></p>
+</body>
+</html>
+

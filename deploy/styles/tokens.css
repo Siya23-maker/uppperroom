@@ -1,0 +1,75 @@
+/* ==========================================================================
+   The Upper Room — design tokens
+   ========================================================================== */
+:root {
+  /* Brand palette (supplied) */
+  --burgundy: #722F45;
+  --ivory: #F8F3E9;
+  --espresso: #44271F;
+  --sage: #879078;
+  --gold: #BE985B;
+  --rose: #EAD8D8;
+
+  /* Derived tones (for contrast-safe text & surfaces) */
+  --burgundy-700: #5B2537;
+  --burgundy-900: #3E1826;
+  --burgundy-050: #F4E9EC;
+  --ivory-2: #F5F0E7;
+  --ivory-3: #ECE3D3;
+  --paper: #FFFDF8;
+  --espresso-80: #5C4038;
+  --espresso-60: #7A625A;
+  --sage-700: #5E6752;   /* 5.6:1 on ivory */
+  --sage-100: #E6E8DF;
+  --gold-700: #8A6A35;   /* 4.7:1 on ivory */
+  --gold-100: #F3E9D6;
+  --rose-2: #F4EAEA;
+  --line: rgba(68, 39, 31, 0.14);
+  --line-strong: rgba(68, 39, 31, 0.26);
+
+  /* Semantic */
+  --bg: #FBF9F4;          /* softer page ground; brand ivory kept for accents */
+  --surface: var(--paper);
+  --text: var(--espresso);
+  --text-muted: var(--espresso-60);
+  --accent: var(--burgundy);
+  --focus: #1B5E8C;
+
+  /* Typography */
+  --font-serif: 'Cormorant Garamond', 'Cormorant', Georgia, 'Times New Roman', serif;
+  --font-sans: 'DM Sans', system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
+  --fs-xs: 0.75rem;
+  --fs-sm: 0.875rem;
+  --fs-base: 1rem;
+  --fs-md: 1.125rem;
+  --fs-lg: clamp(1.35rem, 1.1rem + 0.8vw, 1.6rem);
+  --fs-xl: clamp(1.8rem, 1.4rem + 1.4vw, 2.4rem);
+  --fs-2xl: clamp(2.3rem, 1.6rem + 2.6vw, 3.6rem);
+  --fs-3xl: clamp(2.8rem, 1.8rem + 4vw, 5rem);
+
+  /* Space & shape */
+  --space-1: 0.25rem; --space-2: 0.5rem; --space-3: 0.75rem; --space-4: 1rem;
+  --space-5: 1.5rem; --space-6: 2rem; --space-7: 3rem; --space-8: 4.5rem; --space-9: 7rem;
+  --radius-sm: 4px;
+  --radius: 8px;
+  --radius-lg: 14px;
+  --container: 1240px;
+  --gutter: clamp(16px, 4vw, 40px);
+  --header-h: 76px;
+
+  --shadow-sm: 0 1px 2px rgba(68, 39, 31, 0.06), 0 2px 8px rgba(68, 39, 31, 0.04);
+  --shadow: 0 6px 24px rgba(68, 39, 31, 0.08), 0 2px 6px rgba(68, 39, 31, 0.05);
+  --shadow-lg: 0 24px 60px rgba(62, 24, 38, 0.18);
+
+  /* Motion */
+  --ease: cubic-bezier(0.22, 0.61, 0.36, 1);
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --dur-1: 160ms; --dur-2: 280ms; --dur-3: 520ms;
+
+  /* Paper grain texture */
+  --grain: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 .27 0 0 0 0 .15 0 0 0 0 .12 0 0 0 .55 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root { --dur-1: 1ms; --dur-2: 1ms; --dur-3: 1ms; }
+}
