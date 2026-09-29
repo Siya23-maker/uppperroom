@@ -9,7 +9,7 @@ export const CONFIG = {
   locale: 'en-ZA',
 
   // Brand assets — drop the supplied logo file at this path.
-  logoPath: '/assets/images/logo.png',
+  logoPath: 'assets/images/logo.png', // relative, so it works under /uppperroom/ on GitHub Pages
 
   // Contact — address exactly as supplied by the client.
   address: '5 Sandlewood, Lorraine, Unit 5',

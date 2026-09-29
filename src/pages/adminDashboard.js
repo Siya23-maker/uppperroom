@@ -10,7 +10,7 @@ import { toast } from '../components/toast.js';
 import { img } from '../components/cards.js';
 import { dashboardShell, bindRoleSwitcher, confirmModal, emptyState, stat } from '../components/dashboard.js';
 import { demoCallout } from './shared.js';
-import { navigate } from '../router.js';
+import { navigate, currentUrl } from '../router.js';
 
 const TABS = [
   { id: 'overview', label: 'Overview', icon: 'dashboard' },
@@ -187,7 +187,7 @@ export function adminDashboard({ query }) {
     }),
     mount(root) {
       bindRoleSwitcher(root);
-      const refresh = () => navigate(location.pathname + location.search, { replace: true, scroll: false });
+      const refresh = () => navigate(currentUrl(), { replace: true, scroll: false });
 
       root.querySelectorAll('[data-approve-app]').forEach((b) => b.addEventListener('click', async () => {
         await withBusy(b, () => db.updateApplication(b.dataset.approveApp, { status: 'approved', decided: todayISO() }), 600);

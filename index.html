@@ -3,6 +3,19 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script>
+    // Hosting mode.
+    // - Local dev server (npm start on localhost): clean URLs such as /shop.
+    // - Anywhere else (e.g. GitHub Pages at /uppperroom/): routes after "#", e.g. /uppperroom/#/shop,
+    //   so the homepage, refreshes and back/forward work without a server.
+    // The <base> tag makes the relative asset paths below resolve from the site folder on every route.
+    (function () {
+      var local = /^(localhost|127\.0\.0\.1|\[::1\])$/.test(location.hostname);
+      window.__UR_ROUTER_MODE = local ? 'history' : 'hash';
+      var base = local ? '/' : location.pathname.replace(/[^/]*$/, '');
+      document.write('<base href="' + base + '">');
+    })();
+  </script>
   <title>The Upper Room · Gather Together, Brewing in Unity</title>
   <meta name="description" content="The Upper Room — a Christian marketplace for church-member businesses. Gather Together, Brewing in Unity.">
   <meta name="theme-color" content="#722F45">
@@ -15,7 +28,7 @@
   <meta property="og:site_name" content="The Upper Room">
   <meta property="og:title" content="The Upper Room · Gather Together, Brewing in Unity">
   <meta property="og:description" content="Gather Together, Brewing in Unity">
-  <meta property="og:image" content="assets/images/upperroomlogo.png">
+  <meta property="og:image" content="assets/images/logo.png">
   <meta property="og:locale" content="en_ZA">
   <meta name="twitter:card" content="summary_large_image">
 

@@ -1,13 +1,37 @@
 /**
- * Lightweight History API router.
- * - Intercepts same-origin <a href="/..."> clicks (no framework needed)
- * - Supports back/forward via popstate
+ * Lightweight router.
+ * - Default "history" mode: clean URLs via the History API (needs server.js fallback).
+ * - "hash" mode (window.__UR_ROUTER_MODE = 'hash'): routes live after the "#",
+ *   for hosting where the server can't serve deep links (e.g. a shared preview link).
+ * - Intercepts same-origin <a href="/..."> clicks; supports back/forward via popstate.
  * - Route patterns: '/product/:slug'
  */
 const routes = [];
 let renderFn = null;
 let notFound = null;
-let currentPath = null;
+let memoryUrl = '/';
+let pushBlocked = false; // true if the host frame refuses URL changes (then we keep the route in memory)
+
+const isHash = () => window.__UR_ROUTER_MODE === 'hash';
+
+/** The current in-app URL, e.g. "/shop?category=decor#top". */
+export function currentUrl() {
+  if (!isHash()) return location.pathname + location.search + location.hash;
+  const h = location.hash.slice(1);
+  if (h.startsWith('/')) return h;
+  // No route in the hash (e.g. the bare site URL /uppperroom/) → homepage, unless URL updates are blocked.
+  // A plain in-page anchor such as #main keeps the current page.
+  return h === '' && !pushBlocked ? '/' : memoryUrl;
+}
+
+function writeUrl(next, replace) {
+  if (isHash()) {
+    memoryUrl = next;
+    try { history[replace ? 'replaceState' : 'pushState']({ scrollY: 0 }, '', '#' + next); } catch { pushBlocked = true; }
+  } else {
+    history[replace ? 'replaceState' : 'pushState']({ scrollY: 0 }, '', next);
+  }
+}
 
 export function route(pattern, view) {
   const keys = [];
@@ -31,35 +55,38 @@ function match(pathname) {
 }
 
 export function currentLocation() {
-  return { path: location.pathname, query: new URLSearchParams(location.search), hash: location.hash };
+  const u = new URL(currentUrl(), 'http://app.local');
+  return { path: u.pathname, query: u.searchParams, hash: u.hash };
 }
 
 async function resolve({ scroll = true, restoreScroll = null } = {}) {
   const { path, query, hash } = currentLocation();
   const { view, params } = match(path);
-  const samePage = currentPath === path;
-  currentPath = path;
-  await renderFn({ view, params, query, path, hash, scroll, samePage, restoreScroll });
+  await renderFn({ view, params, query, path, hash, scroll, restoreScroll });
 }
 
 export function navigate(to, { replace = false, scroll = true } = {}) {
-  const url = new URL(to, location.origin);
-  if (url.origin !== location.origin) { location.href = to; return; }
+  const url = new URL(to, 'http://app.local');
+  if (/^https?:/.test(to) && !to.startsWith(location.origin)) { location.href = to; return; }
   const next = url.pathname + url.search + url.hash;
-  if (next === location.pathname + location.search + location.hash && !url.hash) { resolve({ scroll }); return; }
-  history.replaceState({ ...(history.state || {}), scrollY: window.scrollY }, '');
-  history[replace ? 'replaceState' : 'pushState']({ scrollY: 0 }, '', next);
+  if (next === currentUrl() && !url.hash) { resolve({ scroll }); return; }
+  try { history.replaceState({ ...(history.state || {}), scrollY: window.scrollY }, ''); } catch { /* ignore */ }
+  writeUrl(next, replace);
   resolve({ scroll });
 }
 
 /** Update query params without a full re-render (e.g. shop filters). */
-export function setQuery(params, { replace = true } = {}) {
-  const url = new URL(location.href);
+export function setQuery(params) {
+  const url = new URL(currentUrl(), 'http://app.local');
   for (const [k, v] of Object.entries(params)) {
     if (v === null || v === undefined || v === '' || v === 'all') url.searchParams.delete(k);
     else url.searchParams.set(k, v);
   }
-  history[replace ? 'replaceState' : 'pushState'](history.state, '', url.pathname + url.search);
+  const next = url.pathname + url.search;
+  if (isHash()) {
+    memoryUrl = next;
+    try { history.replaceState(history.state, '', '#' + next); } catch { /* ignore */ }
+  } else history.replaceState(history.state, '', next);
 }
 
 export function startRouter(render) {
@@ -72,9 +99,14 @@ export function startRouter(render) {
     if (!a || a.target || a.hasAttribute('download') || a.dataset.external !== undefined) return;
     const href = a.getAttribute('href');
     if (!href.startsWith('/') || href.startsWith('//')) return;
-    const url = new URL(href, location.origin);
-    // Same-page anchor → let the browser scroll.
-    if (url.pathname === location.pathname && url.search === location.search && url.hash) return;
+    const url = new URL(href, 'http://app.local');
+    const cur = currentLocation();
+    // Same-page anchor → just scroll to it.
+    if (url.pathname === cur.path && url.search === (cur.query.toString() ? '?' + cur.query : '') && url.hash) {
+      e.preventDefault();
+      document.getElementById(url.hash.slice(1))?.scrollIntoView({ behavior: 'smooth' });
+      return;
+    }
     e.preventDefault();
     navigate(href);
   });

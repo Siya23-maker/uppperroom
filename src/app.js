@@ -53,6 +53,13 @@ route('/admin', adminDashboard);
 setNotFound(notFoundPage);
 
 // ——— Global interactions ———
+// Skip link: focus main content without changing the URL (keeps "#/route" links intact).
+document.querySelector('.skip-link')?.addEventListener('click', (e) => {
+  e.preventDefault();
+  $('#main').focus();
+  $('#main').scrollIntoView();
+});
+
 document.addEventListener('click', (e) => {
   const quick = e.target.closest('[data-quick-add]');
   if (quick) {

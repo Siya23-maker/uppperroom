@@ -9,7 +9,7 @@ import { db } from '../store/db.js';
 import { ACCOUNTS } from '../data/accounts.js';
 import { getBusiness } from '../data/businesses.js';
 import { categoryName, CATEGORIES } from '../data/categories.js';
-import { navigate } from '../router.js';
+import { navigate, currentLocation } from '../router.js';
 import { toast } from './toast.js';
 
 export const NAV = [
@@ -264,13 +264,13 @@ function renderAccountMenu() {
       db.setRole(r.value);
       toast(`Now viewing as demo ${ROLE_LABEL[r.value].toLowerCase()}`);
       $('#account-menu input[name="demo-role"]:checked')?.focus();
-      if (/^\/(account|seller|admin)/.test(location.pathname)) navigate(DASHBOARD_FOR[r.value]);
+      if (/^\/(account|seller|admin)/.test(currentLocation().path)) navigate(DASHBOARD_FOR[r.value]);
     }),
   );
   $('#demo-seller', menu)?.addEventListener('change', (e) => {
     db.setRole('seller', e.target.value);
     toast(`Seller switched to ${getBusiness(db.currentSeller().businessId).name}`);
-    if (location.pathname.startsWith('/seller')) navigate('/seller');
+    if (currentLocation().path.startsWith('/seller')) navigate('/seller');
     $('#demo-seller')?.focus();
   });
   menu.querySelector('[data-reset]').addEventListener('click', () => {

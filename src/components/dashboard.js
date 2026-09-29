@@ -3,7 +3,7 @@ import { ACCOUNTS } from '../data/accounts.js';
 import { getBusiness } from '../data/businesses.js';
 import { icon } from './icons.js';
 import { esc } from '../utils/format.js';
-import { navigate } from '../router.js';
+import { navigate, currentUrl } from '../router.js';
 import { toast } from './toast.js';
 import { breadcrumbs } from './breadcrumbs.js';
 
@@ -44,7 +44,7 @@ export function bindRoleSwitcher(root) {
   root.querySelector('#rb-seller')?.addEventListener('change', (e) => {
     db.setRole('seller', e.target.value);
     toast(`Now viewing ${getBusiness(db.currentSeller().businessId).name}'s dashboard`);
-    navigate(location.pathname + location.search, { scroll: false });
+    navigate(currentUrl(), { scroll: false });
   });
 }
 
