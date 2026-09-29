@@ -1,0 +1,14 @@
+{
+  "name": "the-upper-room-prototype",
+  "version": "0.1.0",
+  "private": true,
+  "description": "The Upper Room — Christian multi-vendor marketplace. Interactive frontend prototype (HTML, CSS, vanilla JS).",
+  "type": "module",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
